@@ -6,4 +6,13 @@
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f0\fs24 \cf0 Week15\
+Understand and Finish the following data preprocessing methods: \
+\
+1. Padding: Padding all sequences to the same maximum length. Short sequences are padded at the end with special padding symbols (e.g. 0 or a specific "padding" character). This method is applicable to many deep learning frameworks such as TensorFlow or PyTorch, which require that all inputs in a batch have the same size.\
+\
+2 . Truncation: Determine a maximum sequence length and truncate any sequence that exceeds it. This method may lose some information, but it ensures that all sequences have a uniform length.\
+\
+3. Embedding: Using a deep learning model, such as Word Embedding, the sequence is converted to a fixed-length vector representation. This approach captures the contextual information of the sequence while avoiding the problem of dealing directly with the length of the sequence.\
+\
+4. Dynamic Pooling: In Convolutional Neural Networks (CNNs) or Recurrent Neural Networks (RNNs), a global average pooling layer or a global maximum pooling layer is used to process variable-length inputs to produce a fixed-length output representation.\
 }
