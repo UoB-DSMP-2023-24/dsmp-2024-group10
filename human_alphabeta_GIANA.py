@@ -4,6 +4,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import GridSearchCV
+import matplotlib.pyplot as plt
+from sklearn.metrics import roc_curve, auc, roc_auc_score
+from sklearn.preprocessing import label_binarize
 
 df_AB=pd.read_csv('df_AB--RotationEncodingBL62.txt_EncodingMatrix.txt', sep="\t", header=None)
 print(len(df_AB))
@@ -11,7 +14,7 @@ print(len(df_AB))
 df_AB = df_AB[df_AB.iloc[:, 6] == 'HomoSapiens']
 
 value_counts = df_AB.iloc[:, 10].value_counts()
-values_to_keep = value_counts[value_counts >= 2].index
+values_to_keep = value_counts[value_counts >= 5].index
 print(values_to_keep)
 df_AB = df_AB[df_AB.iloc[:, 10].isin(values_to_keep)]
 print(len(df_AB))
@@ -72,3 +75,28 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f"Test set accuracy: {accuracy:.2f}")
 
 
+y_scores = best_knn.predict_proba(X_test)
+
+n_classes = len(set(y_test))
+
+# 二值化y_test，如果已经是二值化的可以跳过这步
+y_test_binarized = label_binarize(y_test, classes=np.arange(n_classes))
+
+# 计算微平均ROC曲线和AUC
+fpr, tpr, _ = roc_curve(y_test_binarized.ravel(), y_scores.ravel())
+roc_auc = auc(fpr, tpr)
+
+# 绘制微平均ROC曲线
+plt.figure(figsize=(8, 6))
+lw = 2
+plt.plot(fpr, tpr, color='blue', linestyle='-', linewidth=lw,
+         label='Micro-average ROC curve (area = {0:0.2f})'.format(roc_auc))
+
+plt.plot([0, 1], [0, 1], 'k--', lw=lw)
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Micro-average ROC Curve across all classes')
+plt.legend(loc="lower right")
+plt.show()
