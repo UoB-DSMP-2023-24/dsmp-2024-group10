@@ -7,6 +7,7 @@ from sklearn.model_selection import GridSearchCV
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc, roc_auc_score
 from sklearn.preprocessing import label_binarize
+from sklearn.metrics import precision_score, recall_score, f1_score, classification_report
 
 df_AB=pd.read_csv('df_AB--RotationEncodingBL62.txt_EncodingMatrix.txt', sep="\t", header=None)
 print(len(df_AB))
@@ -95,3 +96,15 @@ plt.ylabel('True Positive Rate')
 plt.title('Micro-average ROC Curve across all classes')
 plt.legend(loc="lower right")
 plt.show()
+
+
+precision = precision_score(y_test, y_pred, average='weighted')
+recall = recall_score(y_test, y_pred, average='weighted')
+f1 = f1_score(y_test, y_pred, average='weighted')
+
+print(f"Precision: {precision:.2f}")
+print(f"Recall: {recall:.2f}")
+print(f"F1 Score: {f1:.2f}")
+
+report = classification_report(y_test, y_pred, target_names=[mapping_dict[i] for i in range(n_classes)])
+print(report)
